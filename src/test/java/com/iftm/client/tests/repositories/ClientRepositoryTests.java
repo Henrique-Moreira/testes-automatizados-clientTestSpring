@@ -8,6 +8,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+
 import com.iftm.client.entities.Client;
 import com.iftm.client.repositories.ClientRepository;
 import com.iftm.client.tests.factory.ClientFactory;
@@ -21,12 +24,14 @@ public class ClientRepositoryTests {
 	private long existingId;
 	private long noneExistingId;
 	private long countTotalClients;
+	private long countClientByIncome;
 	
 	@BeforeEach
 	void setUp() throws Exception {
 		existingId = 1L;
 		noneExistingId = Long.MAX_VALUE;
 		countTotalClients = 12L;
+		countClientByIncome = 5L;
 	}
 	
 	@Test
@@ -60,6 +65,18 @@ public class ClientRepositoryTests {
 		Assertions.assertEquals(countTotalClients +1, client.getId());
 		Assertions.assertTrue(result.isPresent());
 		Assertions.assertSame(result.get(), client);
+	}
+	
+	@Test
+	public void findByIncomeShouldReturnClientsWhenClientIncomeIsGreaterThanOrEqualsToValue() {
+		
+		Double income = 4000.0;
+		PageRequest pageResquest = PageRequest.of(0, 10);
+		
+		Page<Client> result = repository.findByIncome(income, pageResquest);
+		
+		Assertions.assertFalse(result.isEmpty());
+		Assertions.assertEquals(countClientByIncome, result.getTotalElements());
 	}
 }
 
