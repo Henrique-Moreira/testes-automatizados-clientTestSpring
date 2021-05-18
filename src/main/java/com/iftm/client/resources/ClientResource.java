@@ -1,6 +1,10 @@
 package com.iftm.client.resources;
 
 import java.net.URI;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -19,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.iftm.client.dto.ClientDTO;
+import com.iftm.client.entities.Client;
 import com.iftm.client.services.ClientService;
 
 @RestController
@@ -59,6 +64,24 @@ public class ClientResource {
 		return ResponseEntity.ok().body(dto);
 	}
 	
+	@GetMapping(value = "/name/{name}")
+	public List<Client> findByNameContainingIgnoreCase(@PathVariable String name) {
+		return service.findByNameContainingIgnoreCase(name);
+	}
+	
+	@GetMapping(value = "/date/{date}")
+    public List<Client> findByBirthDateOrYear(@PathVariable String date) throws ParseException {
+        SimpleDateFormat format;
+        if(date.length() == 4) {
+        	format = new SimpleDateFormat("yyyy");
+        } else {
+        	format = new SimpleDateFormat("yyyy-MM-dd");
+        }
+
+        Date newDate = format.parse(date);
+        return service.findByBirthDateOrYear(newDate.toInstant());
+    }
+
 	@PostMapping
 	public ResponseEntity<ClientDTO> insert(@RequestBody ClientDTO dto) {
 		dto = service.insert(dto);

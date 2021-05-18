@@ -1,5 +1,7 @@
 package com.iftm.client.services;
 
+import java.time.Instant;
+import java.util.List;
 import java.util.Optional;
 
 import javax.persistence.EntityNotFoundException;
@@ -41,6 +43,16 @@ public class ClientService {
 		Optional<Client> obj = repository.findById(id);
 		Client entity = obj.orElseThrow(() -> new ResourceNotFoundException("Entity not found"));
 		return new ClientDTO(entity);
+	}
+	
+	@Transactional(readOnly = true)
+	public List<Client> findByNameContainingIgnoreCase(String name) {
+		return repository.findByNameContainingIgnoreCase(name);
+	}
+	
+	@Transactional(readOnly = true)
+	public List<Client> findByBirthDateOrYear(Instant date) {
+		return repository.findByBirthDateOrYear(date);
 	}
 	
 	@Transactional
