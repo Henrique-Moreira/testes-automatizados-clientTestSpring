@@ -78,6 +78,13 @@ public class ClientRepositoryTests {
 		Assertions.assertFalse(result.isEmpty());
 		Assertions.assertEquals(countClientByIncome, result.getTotalElements());
 	}
+	
+	
+	// Atividade 3 - Testes JPA Repository
+	@Test
+	public void findByNameShouldReturnExistingName() {
+		
+	}
 }
 
 
