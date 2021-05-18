@@ -1,5 +1,6 @@
 package com.iftm.client.tests.repositories;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Assertions;
@@ -25,6 +26,9 @@ public class ClientRepositoryTests {
 	private long noneExistingId;
 	private long countTotalClients;
 	private long countClientByIncome;
+	private String existingName;
+	private String existingNameCaseSensitive;
+	private String emptyName;
 	
 	@BeforeEach
 	void setUp() throws Exception {
@@ -32,6 +36,9 @@ public class ClientRepositoryTests {
 		noneExistingId = Long.MAX_VALUE;
 		countTotalClients = 12L;
 		countClientByIncome = 5L;
+		existingName = "Carolina";
+		existingNameCaseSensitive = "cARoLiNa";
+		emptyName = "";
 	}
 	
 	@Test
@@ -81,10 +88,40 @@ public class ClientRepositoryTests {
 	
 	
 	// Atividade 3 - Testes JPA Repository
+	
+	// Testar o find para nome existente;
 	@Test
 	public void findByNameShouldReturnExistingName() {
-		
+		List<Client> listName = repository.findByNameContainingIgnoreCase(existingName);
+		Assertions.assertFalse(listName.isEmpty());
 	}
+	
+	// Testar o find para nome existente ignorando case
+	@Test
+	public void findByNameShouldReturnExistingNameIgnoringCase() {
+		boolean result;
+		List<Client> listName = repository.findByNameContainingIgnoreCase(existingNameCaseSensitive);
+		
+		
+		if(listName.isEmpty()) {
+			result = false;
+		} else {
+			result = true;
+		}
+		
+		Assertions.assertTrue(result);
+	}
+	
+	// Testar find para nome vazio (Neste caso teria que retornar todos os clientes);
+	@Test
+	public void findByNameShouldReturnAllNamesWithoudPuttingTheName() {
+		List<Client> listName = repository.findByNameContainingIgnoreCase(emptyName);
+		List<Client> allNames = repository.findAll();
+		
+		Assertions.assertEquals(allNames, listName);
+	}
+	
+	// Testar find para data de nascimento maior que determinado data de referência
 }
 
 
