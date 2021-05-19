@@ -33,7 +33,7 @@ public class ClientResource {
 	@Autowired
 	private ClientService service;
 
-	@GetMapping(value = "/name")
+	@GetMapping
 	public ResponseEntity<Page<ClientDTO>> findAll(
 			@RequestParam(value = "page", defaultValue = "0") Integer page,
 			@RequestParam(value = "linesPerPage", defaultValue = "12") Integer linesPerPage,
