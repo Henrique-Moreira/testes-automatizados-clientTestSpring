@@ -135,12 +135,12 @@ public class ClientRepositoryTests {
 	// Testar find para data de nascimento maior que determinado data de referência
 	@Test
 	public void findByBirthDateShouldReturnAllNamesThatHaveBirthdayOnTheInformedDate() {
-		// Data de referência = 1997-12-23
+		// Data de referência = 1996-12-23
 		Date newDate = birthdayDate.getTime();
 		List<Client> allNames = repository.findByBirthDateOrYear(newDate.toInstant());
 
 		Assertions.assertFalse(allNames.isEmpty());
-
+		
 		// Data de referencia + 1 ano = 1997-12-23
 		birthdayDate.add(Calendar.YEAR, 1);
 		newDate = birthdayDate.getTime();
