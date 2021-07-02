@@ -101,4 +101,6 @@ public class ClientServiceIT {
 		Assertions.assertTrue(existingName.equals(entity.getName()));
 		Assertions.assertEquals(existingCpf, entity.getCpf());
 	}
+	
+	
 }
