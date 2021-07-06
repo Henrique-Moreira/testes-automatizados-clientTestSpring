@@ -12,9 +12,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.iftm.client.dto.ClientDTO;
+import com.iftm.client.entities.Client;
 import com.iftm.client.repositories.ClientRepository;
 import com.iftm.client.services.ClientService;
 import com.iftm.client.services.exceptions.ResourceNotFoundException;
+import com.iftm.client.tests.factory.ClientFactory;
 
 @SpringBootTest //carrega o contexto da aplicacao
 @Transactional 
@@ -33,6 +35,8 @@ public class ClientServiceIT {
 	private PageRequest pageResquest;
 	private long existingId2;
 	private String existingName, existingCpf;
+	private Client client;
+	private ClientDTO clientDTO;
 	
 	@BeforeEach
 	void setUp() throws Exception {
@@ -44,6 +48,8 @@ public class ClientServiceIT {
 		existingId2 = 11L;
 		existingName = "Silvio Almeida";
 		existingCpf = "10164334861";
+		client = ClientFactory.createClient();
+		clientDTO = ClientFactory.createClientDTO();
 	}
 	
 	@Test
@@ -102,5 +108,40 @@ public class ClientServiceIT {
 		Assertions.assertEquals(existingCpf, entity.getCpf());
 	}
 	
+	/*Implementar um teste que deverá testar o insert. Para o teste, você deverá criar um
+	novo cliente usando o padrão fábrica e inserir o cliente. Em seguida você deverá
+	verificar o findAll e verificar se o número de clientes será incrementado na base de
+	dados.*/
+	@Test
+	public void insertShouldIncreaseCountTotalClients() {
+		// antes de inserir
+		Assertions.assertEquals(countTotalClients, repository.findAll().size());
+		
+		service.insert(clientDTO);
+		
+		// depois de inserir
+		Assertions.assertEquals(countTotalClients+1, repository.findAll().size());
+	}
 	
+	/*Implementar um teste que deverá testar o update. Para o teste, você deverá
+	atualizar os dados de um cliente existente e em seguida você deverá verificar se os
+	dados do cliente foram atualizados. Lembrando que o service update retorna os
+	dados do cliente através do ClientDTO.*/
+	@Test
+	public void updateShouldUpdateTheClient() {
+		ClientDTO client = service.findById(existingId);
+		ClientDTO clientUpdated = service.update(existingId, clientDTO);
+		 
+		// Provar que o cliente foi atualizado testando se o id é o mesmo
+		Assertions.assertEquals(client.getId(), clientUpdated.getId());
+		
+		
+		// Verificar se os atributos atualizaram
+		Assertions.assertNotEquals(client.getName(), clientUpdated.getName());
+		Assertions.assertFalse(client.getCpf().equals(clientUpdated.getCpf()));
+		Assertions.assertFalse(client.getChildren() == clientUpdated.getChildren());
+		Assertions.assertTrue(client.getIncome() != clientUpdated.getIncome());
+		Assertions.assertNotEquals(client.getBirthDate(), clientUpdated.getBirthDate());
+							
+	}
 }

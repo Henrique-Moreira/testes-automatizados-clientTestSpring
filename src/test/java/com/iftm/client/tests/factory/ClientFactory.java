@@ -8,7 +8,7 @@ import com.iftm.client.entities.Client;
 public class ClientFactory {
 	
 	public static Client createClient() {
-		return new Client(1L, "Pablo Alberto", "10212012020", 2000.0, Instant.parse("1958-09-20T08:00:00Z"), 1);
+		return new Client(13L, "Pablo Alberto", "10212012020", 2000.0, Instant.parse("1958-09-20T08:00:00Z"), 1);
 	}
 	
 	public static ClientDTO createClientDTO() {
