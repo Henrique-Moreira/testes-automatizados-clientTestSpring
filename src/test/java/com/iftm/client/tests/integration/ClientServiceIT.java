@@ -49,7 +49,7 @@ public class ClientServiceIT {
 		existingName = "Silvio Almeida";
 		existingCpf = "10164334861";
 		client = ClientFactory.createClient();
-		clientDTO = ClientFactory.createClientDTO();
+		clientDTO = ClientFactory.createClientDTO(13L);
 	}
 	
 	@Test
